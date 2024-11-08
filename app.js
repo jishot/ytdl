@@ -1,10 +1,11 @@
 const express = require('express');
-const ytdl = require('ytdl-core');
+const ytdl = require('node-ytdl-core');
 const archiver = require('archiver');
 const fs = require('fs');
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 const app = express();
 const path = require('path');
+
 app.use(express.static(__dirname));
 
 app.get('/', (req, res) => {
@@ -19,7 +20,7 @@ app.get('/download', async (req, res) => {
   }
 
   try {
-    const video = ytdl(youtubeLink);
+    const video = ytdl(youtubeLink, { quality: 'highest' });
     const output = fs.createWriteStream('video.mp4');
 
     video.pipe(output);
