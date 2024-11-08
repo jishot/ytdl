@@ -23,7 +23,7 @@ app.get('/download', async (req, res) => {
     const output = fs.createWriteStream('video.mp4');
 
     await youtubeDl(videoUrl, {
-      o: output.path,
+      output: output.path, // Corrected option name
       f: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
     });
 
