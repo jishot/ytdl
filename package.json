@@ -4,7 +4,7 @@
   "description": "Express app for downloading YouTube video and sending it as a zip file",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "express": "^4.17.1",
