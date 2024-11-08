@@ -22,10 +22,15 @@ app.get('/download', async (req, res) => {
   try {
     const output = fs.createWriteStream('video.mp4');
 
-    await youtubeDl(videoUrl, {
+    const downloadOptions = {
       output: output.path,
       f: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
-    });
+    };
+
+    const info = await youtubeDl.getInfo(videoUrl);
+    console.log('Video Info:', info);
+
+    await youtubeDl(videoUrl, downloadOptions);
 
     const archive = archiver('zip');
     const zipOutput = fs.createWriteStream('video.zip');
