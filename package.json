@@ -2,13 +2,13 @@
   "name": "youtube-video-zip-download",
   "version": "1.0.0",
   "description": "Express app for downloading YouTube video and sending it as a zip file",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "ytdl-core": "^4.9.1",
+    "node-ytdl-core": "^0.3.1",
     "archiver": "^5.2.1"
   }
 }
