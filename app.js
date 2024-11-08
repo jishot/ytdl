@@ -27,9 +27,6 @@ app.get('/download', async (req, res) => {
       f: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
     };
 
-    const info = await youtubeDl.getInfo(videoUrl);
-    console.log('Video Info:', info);
-
     await youtubeDl(videoUrl, downloadOptions);
 
     const archive = archiver('zip');
