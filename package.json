@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "youtube-dl-exec": "^0.30.0",
+    "youtube-dl-exec": "^0.36.0",
     "archiver": "^5.2.1"
   }
 }
