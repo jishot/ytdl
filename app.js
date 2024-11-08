@@ -2,8 +2,12 @@ const express = require('express');
 const ytdl = require('ytdl-core');
 const archiver = require('archiver');
 const fs = require('fs');
-
+const PORT = process.env.PORT || 3000
 const app = express();
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
 
 app.get('/download', async (req, res) => {
     const { youtubeLink } = req.query;
@@ -42,6 +46,6 @@ app.get('/download', async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
