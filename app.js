@@ -1,5 +1,5 @@
 const express = require('express');
-const ytdl = require('node-ytdl-core');
+const youtubeDl = require('youtube-dl-exec');
 const archiver = require('archiver');
 const fs = require('fs');
 const PORT = process.env.PORT || 3000;
@@ -13,35 +13,35 @@ app.get('/', (req, res) => {
 });
 
 app.get('/download', async (req, res) => {
-  const { youtubeLink } = req.query;
+  const { videoUrl } = req.query;
 
-  if (!youtubeLink) {
-    return res.status(400).send('Missing YouTube link');
+  if (!videoUrl) {
+    return res.status(400).send('Missing YouTube video URL');
   }
 
   try {
-    const video = ytdl(youtubeLink, { quality: 'highest' });
     const output = fs.createWriteStream('video.mp4');
 
-    video.pipe(output);
+    await youtubeDl(videoUrl, {
+      o: output.path,
+      f: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+    });
 
-    output.on('finish', () => {
-      const archive = archiver('zip');
-      const zipOutput = fs.createWriteStream('video.zip');
+    const archive = archiver('zip');
+    const zipOutput = fs.createWriteStream('video.zip');
 
-      archive.pipe(zipOutput);
-      archive.file('video.mp4', { name: 'video.mp4' });
-      archive.finalize();
+    archive.pipe(zipOutput);
+    archive.file('video.mp4', { name: 'video.mp4' });
+    archive.finalize();
 
-      zipOutput.on('close', () => {
-        res.download('video.zip', 'video.zip', (err) => {
-          if (err) {
-            console.error(err);
-            return res.status(500).send('Error generating zip file');
-          }
-          fs.unlinkSync('video.mp4');
-          fs.unlinkSync('video.zip');
-        });
+    zipOutput.on('close', () => {
+      res.download('video.zip', 'video.zip', (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Error generating zip file');
+        }
+        fs.unlinkSync('video.mp4');
+        fs.unlinkSync('video.zip');
       });
     });
   } catch (error) {
