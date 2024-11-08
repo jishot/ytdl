@@ -23,7 +23,7 @@ app.get('/download', async (req, res) => {
     const output = fs.createWriteStream('video.mp4');
 
     await youtubeDl(videoUrl, {
-      output: output.path, // Corrected option name
+      output: output.path,
       f: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
     });
 
@@ -32,6 +32,7 @@ app.get('/download', async (req, res) => {
 
     archive.pipe(zipOutput);
     archive.file('video.mp4', { name: 'video.mp4' });
+
     archive.finalize();
 
     zipOutput.on('close', () => {
@@ -43,6 +44,10 @@ app.get('/download', async (req, res) => {
         fs.unlinkSync('video.mp4');
         fs.unlinkSync('video.zip');
       });
+    });
+
+    archive.on('end', () => {
+      console.log('Archiving completed, initiating download');
     });
   } catch (error) {
     console.error(error);
